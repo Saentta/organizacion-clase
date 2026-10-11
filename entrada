@@ -1,0 +1,59 @@
+import numpy as np      # Nos hará falta para las matrices de amistad y trabajo
+
+def leer_fichero(fichero_txt: str)->(int, list, list):
+    with open(fichero_txt, 'r') as f: # Abrimos el fichero.txt con apodo f
+
+
+        num_veces_algoritmo = 0
+        num_alumnos = 0
+        lista_matrices_amistad = []   # Inicializamos las variables que vamos a usar
+        lista_matrices_trabajo = []
+        
+        todas_las_lineas = f.readlines()
+        num_linea = 0
+        while num_linea < len(todas_las_lineas):
+            linea = f.readline()
+            
+            if num_linea == 0:
+                num_veces_algoritmo = int(linea.strip()) 
+            
+            elif num_linea != 0 and todas_las_lineas[num_linea][1] != ' ': # Con esta condición nos aseguramos el num_alumnos por clase,
+                num_alumnos = int(todas_las_lineas[num_linea].strip())   # puesto que como el segundo caracter de las matrices va a ser siempre 
+                matriz_amistad_clase = np.matrix([[0]*num_alumnos]*num_alumnos)# un espacio vacio; nos apoyamos en esto.
+                
+                matriz_trabajo_clase = matriz_amistad_clase # Ambas matrices tienen la misma dimension
+                
+            
+            else:
+                for y in range(num_alumnos+1):
+                    for x in range(len(linea.strip()+2)): # Tenemos que hacer +2 porque las matrices son num_alumnos-1 
+                        if x==y:
+                            matriz_amistad_clase[x, y] = 0 # Nos aseguramos de tener la diagonal 0
+                            if len(matriz_amistad_clase[y]) <= x+1: # y de que no quede afuera el valor que le añadamos para evitar un error
+                                matriz_amistad_clase[x+1, y] = linea.strip()[x] 
+                        else:        
+                            matriz_amistad_clase[x, y] = linea.strip()[x]
+                    linea = f.readline()
+                    num_linea += 1
+                
+                lista_matrices_amistad.append(matriz_amistad_clase) # añadimos la matriz a la lista
+                
+                linea = f.readline()
+                num_linea +=1               # Inmediatamente después, están los valores para la matriz trabajo
+                                            # Entonces repetimos el mismo proceso ahora con la matriz trabajo
+                for y in range(num_alumnos+1):
+                    for x in range(len(linea.strip()+2)): 
+                        if x==y:
+                            matriz_trabajo_clase[x, y] = 0 
+                            if len(matriz_trabajo_clase[y]) <= x+1: 
+                                matriz_trabajo_clase[x+1, y] = linea.strip()[x] 
+                        else:        
+                            matriz_trabajo_clase[x, y] = linea.strip()[x]
+                    linea = f.readline()
+                    num_linea += 1
+
+                lista_matrices_trabajo.append(matriz_trabajo_clase)
+            
+            num_linea += 1 
+    
+    return (num_veces_algoritmo, lista_matrices_amistad, lista_matrices_trabajo)
