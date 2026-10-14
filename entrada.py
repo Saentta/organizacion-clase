@@ -19,57 +19,64 @@ def leer_fichero(fichero_txt: str)->(int, int, list, list):
                 num_veces_algoritmo = int(linea.strip()) 
         
         num_linea = 1
+        linea = f.readline()
 
-        while num_linea < len(todas_las_lineas):
-            linea = f.readline()
+        while num_linea < len(todas_las_lineas)-2:
+            
             
             if len(linea.strip().split()) == 1: # Con esta condición nos aseguramos el num_alumnos por clase,
                 num_alumnos = int(linea.strip())   # puesto que como el segundo caracter de las matrices va a ser siempre 
                 matriz_amistad_clase = np.matrix([[0]*num_alumnos]*(num_alumnos))# un espacio vacio; nos apoyamos en esto.
                 matriz_trabajo_clase = np.matrix([[0]*num_alumnos]*(num_alumnos)) # Ambas matrices tienen la misma dimension
                 lista_num_alumnos.append(num_alumnos)
+                linea = f.readline()
                 
             
             else:
                 num_0_diagonal = 0
-                for y in range(num_alumnos-1):
-                    for x in range(num_alumnos-1): # Tenemos que hacer +2 porque las matrices son num_alumnos-1 
-                        if x==y:
-                            matriz_amistad_clase[y, x] = 0 # Nos aseguramos de tener la diagonal 0
-                            num_0_diagonal += 1
-                            if len(matriz_amistad_clase) > x+1:
-                                matriz_amistad_clase[y, x+1] = int((linea.strip().split())[x])
+                for y in range(num_alumnos):
+                    for x in range(num_alumnos-1): # Hacemos -1 porque en una iteracion añadimos dos numeros de golpe
+                        if linea != '':
+                            if x==y:
+                                matriz_amistad_clase[y, x] = 0 # Nos aseguramos de tener la diagonal 0
+                                num_0_diagonal += 1
+                                if len(matriz_amistad_clase) > x+1:
+                                    matriz_amistad_clase[y, x+1] = int((linea.strip().split())[x])
+                            else:
+                                if x+1 <= num_0_diagonal:
+                                    matriz_amistad_clase[y, x] = int((linea.strip().split())[x])
+                                elif x+1 > num_0_diagonal:
+                                    matriz_amistad_clase[y, x+1] = int((linea.strip().split())[x])
                         else:
-                            if x+1 <= num_0_diagonal:
-                                matriz_amistad_clase[y, x] = int((linea.strip().split())[x])
-                            elif x+1 > num_0_diagonal:
-                                matriz_amistad_clase[y, x+1] = int((linea.strip().split())[x])
+                            break
                     linea = f.readline()
                     num_linea += 1
                 lista_matrices_amistad.append(matriz_amistad_clase) # añadimos la matriz a la lista
                 
-                linea = f.readline()
-                num_linea +=1               
+                            
                                             # Inmediatamente después, están los valores para la matriz trabajo
                                             # Entonces repetimos el mismo proceso ahora con la matriz trabajo
                 
                 num_0_diagonal = 0
-                for y in range(num_alumnos-1):
-                    for x in range(num_alumnos-1): # Tenemos que hacer +2 porque las matrices son num_alumnos-1 
-                        if x==y:
-                            matriz_trabajo_clase[y, x] = 0 # Nos aseguramos de tener la diagonal 0
-                            num_0_diagonal += 1
-                            if len(matriz_trabajo_clase) > x+1:
-                                matriz_trabajo_clase[y, x+1] = int((linea.strip().split())[x])
+                for y in range(num_alumnos):
+                    for x in range(num_alumnos-1): 
+                        if linea != '':
+                            if x==y:
+                                matriz_trabajo_clase[y, x] = 0 # Nos aseguramos de tener la diagonal 0
+                                num_0_diagonal += 1
+                                if len(matriz_trabajo_clase) > x+1:
+                                    matriz_trabajo_clase[y, x+1] = int((linea.strip().split())[x])
+                            else:
+                                if x+1 <= num_0_diagonal:
+                                    matriz_trabajo_clase[y, x] = int((linea.strip().split())[x])
+                                elif x+1 > num_0_diagonal:
+                                    matriz_trabajo_clase[y, x+1] = int((linea.strip().split())[x])
                         else:
-                            if x+1 <= num_0_diagonal:
-                                matriz_trabajo_clase[y, x] = int((linea.strip().split())[x])
-                            elif x+1 > num_0_diagonal:
-                                matriz_trabajo_clase[y, x+1] = int((linea.strip().split())[x])
+                            break
                     linea = f.readline()
                     num_linea += 1
                 lista_matrices_trabajo.append(matriz_trabajo_clase)
                 
-            num_linea += 1 
+            
     
     return (num_veces_algoritmo, lista_num_alumnos, lista_matrices_amistad, lista_matrices_trabajo)
