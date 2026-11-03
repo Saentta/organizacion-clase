@@ -51,17 +51,11 @@ def generar(nivel, solucion_actual, amistad, trabajo, beneficio_actual, usada):
 
 def criterio(nivel, solucion_actual, n, usada, amistad, trabajo, beneficio_actual, mejor_beneficio):
     import numpy as np
-    estimacion_maxima = 0
     
-    for i in range(len(amistad)):
-        if i + nivel < len(amistad):
-            i += nivel
-        for j in range(i+1, len(amistad)):
-            if j + nivel < len(amistad):
-                j += nivel
-            if (amistad[i, j]+amistad[j, i])*(trabajo[i, j]+trabajo[j, i]) > estimacion_maxima:
-                estimacion_maxima = (amistad[i, j]+amistad[j, i])*(trabajo[i, j]+trabajo[j, i])
-
+    estimacion_maxima = 0 
+    for i in range(nivel+1, len(amistad)-1):
+        maximo_fila = (np.amax(amistad[i]), np.amax(trabajo[i]))
+        estimacion_maxima+= maximo_fila[0]*maximo_fila[1]
     if (beneficio_actual+ estimacion_maxima) <= mejor_beneficio:
        return False
     return usada[solucion_actual[nivel]] == 1 and nivel < (n-1)
