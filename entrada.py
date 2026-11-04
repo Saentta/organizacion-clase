@@ -84,3 +84,15 @@ def leer_fichero(fichero_txt: str)->(int, int, list, list):
             
     
     return (num_veces_algoritmo, lista_num_alumnos, lista_matrices_amistad, lista_matrices_trabajo)
+
+def valor_asignacion(i, j, amistad:matrix, trabajo:matrix):
+  valor = (amistad[i, j]+amistad[j, i])*(trabajo[i, j]+trabajo[j, i])
+  return valor
+
+def crea_matriz_beneficio(n, amistad, trabajo):
+    
+    matriz_beneficio = np.matrix([[None]*n]*n)
+    for i in range(n):
+        for j in range(n):
+            matriz_beneficio[i, j] = (amistad[i, j] + amistad[j, i])* (trabajo[i, j] + trabajo[j, i])
+    return matriz_beneficio
