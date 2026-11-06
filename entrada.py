@@ -91,8 +91,25 @@ def valor_asignacion(i, j, amistad:matrix, trabajo:matrix):
 
 def crea_matriz_beneficio(n, amistad, trabajo):
     
-    matriz_beneficio = np.matrix([[None]*n]*n)
+    matriz_beneficio = np.matrix([[2]*n]*n)
     for i in range(n):
         for j in range(n):
             matriz_beneficio[i, j] = (amistad[i, j] + amistad[j, i])* (trabajo[i, j] + trabajo[j, i])
+    
     return matriz_beneficio
+
+
+def genera_matrices(n):
+    
+    with open(f'ejemplo{n}.txt', 'w') as f:
+        f.write('1\n')
+        f.write(f'{n}\n')
+        linea = 0
+        num_aleatorios = list()
+        for i in range(2*(n*(n-1))):
+            num_aleatorios.append(np.random.randint(9)) # generamos TODOS los números
+        
+        for numero in range(len(num_aleatorios)):
+            if numero != 0 and numero%(n-1) == 0:
+                f.write(f'\n')
+            f.write(f'{num_aleatorios[numero]} ')

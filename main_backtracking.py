@@ -1,9 +1,7 @@
 # main backtracking
 import numpy as np
 from entrada import leer_fichero, crea_matriz_beneficio
-from Backtracking_3 import Backtracking_3
-
-
+from backtracking import backtracking_opt
 # Programa principial
 
 ruta_fichero = input('¿Cuál es la ruta del fichero a analizar?: ')
@@ -18,18 +16,20 @@ beneficio_total_clase = 0
 
 for i in range(num_veces_algoritmo): # Llamada al algoritmo voraz, y lo efectuamos tantas veces como clases (num_veces_algortimo) haya
     matriz_beneficio = crea_matriz_beneficio(lista_num_alumnos[i], lista_matrices_amistad[i], lista_matrices_trabajo[i])
-    beneficio_total_clase, solucion_clase = Backtracking_3(lista_num_alumnos[i], matriz_beneficio)
+    beneficio_total_clase, solucion_clase = backtracking_opt(lista_num_alumnos[i], matriz_beneficio)
     print(beneficio_total_clase, '\n')
     orden_alumnos = ''
-    for i in solucion_clase:
-        tem = i
-        if i == None:
-            i = ''
-        elif i == None:
-            i = ''
+    for alumno in solucion_clase:
+        
+        if alumno == None:
+            alumno = ''
+        elif alumno == None:
+            alumno = ''
 
-        orden_alumnos += str(i) + ' ' 
+        orden_alumnos += str(alumno) + ' ' 
     print(orden_alumnos, '\n')
 
 #905a.in
+#905b.in
+#905c.in
 #ejemplo.txt
